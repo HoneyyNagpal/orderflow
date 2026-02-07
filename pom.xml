@@ -120,12 +120,12 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
-        <!-- Lombok -->
-        <dependency>
+        <!-- Lombok 
+       <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
+        </dependency> -->
 
         <!-- ModelMapper for DTO conversions -->
         <dependency>

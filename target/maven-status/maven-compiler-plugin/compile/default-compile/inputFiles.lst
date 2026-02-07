@@ -1,0 +1,11 @@
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/CustomerSegment.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/OrderFlowApplication.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/TransactionType.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/entity/Address.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/UserRole.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/OrderStatus.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/InvoiceStatus.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/entity/BaseEntity.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/entity/User.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/PaymentStatus.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/PaymentMethod.java
