@@ -1,0 +1,57 @@
+{
+  "info": {
+    "name": "OrderFlow API",
+    "description": "Complete API collection for OrderFlow system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phoneNumber\": \"1234567890\",\n  \"active\": true\n}"
+            },
+            "url": {"raw": "http://localhost:8080/api/v1/customers", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "v1", "customers"]}
+          }
+        },
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "http://localhost:8080/api/v1/customers", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "v1", "customers"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"LAPTOP-001\",\n  \"name\": \"Gaming Laptop\",\n  \"description\": \"High performance laptop\",\n  \"price\": 1299.99,\n  \"quantityInStock\": 50,\n  \"active\": true\n}"
+            },
+            "url": {"raw": "http://localhost:8080/api/v1/products", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "v1", "products"]}
+          }
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "http://localhost:8080/api/v1/products", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "v1", "products"]}
+          }
+        }
+      ]
+    }
+  ]
+}
