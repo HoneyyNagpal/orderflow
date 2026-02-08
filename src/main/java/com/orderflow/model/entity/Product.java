@@ -91,6 +91,10 @@ public class Product extends BaseEntity {
         this.reservedQuantity = (this.reservedQuantity != null ? this.reservedQuantity : 0) + quantity;
     }
 
+    public void releaseReservedStock(Integer quantity) {
+        this.reservedQuantity = Math.max(0, (this.reservedQuantity != null ? this.reservedQuantity : 0) - quantity);
+    }
+
     public void reduceStock(Integer quantity) {
         this.quantityInStock -= quantity;
         this.reservedQuantity = Math.max(0, (this.reservedQuantity != null ? this.reservedQuantity : 0) - quantity);
