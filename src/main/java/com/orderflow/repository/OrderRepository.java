@@ -1,6 +1,5 @@
 package com.orderflow.repository;
 
-import com.orderflow.model.entity.Customer;
 import com.orderflow.model.entity.Order;
 import com.orderflow.model.enums.OrderStatus;
 import org.springframework.data.domain.Page;
@@ -17,19 +16,14 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByOrderNumber(String orderNumber);
-    List<Order> findByCustomer(Customer customer);
-    Page<Order> findByCustomer(Customer customer, Pageable pageable);
+    
     List<Order> findByStatus(OrderStatus status);
-    Page<Order> findByStatus(OrderStatus status, Pageable pageable);
+    
+    Page<Order> findByCustomerId(Long customerId, Pageable pageable);
     
     @Query("SELECT o FROM Order o WHERE o.orderDate BETWEEN :startDate AND :endDate")
     List<Order> findOrdersBetweenDates(@Param("startDate") LocalDateTime startDate, 
                                        @Param("endDate") LocalDateTime endDate);
     
-    @Query("SELECT o FROM Order o WHERE o.customer.id = :customerId AND o.status = :status")
-    List<Order> findByCustomerIdAndStatus(@Param("customerId") Long customerId, 
-                                          @Param("status") OrderStatus status);
-    
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = :status")
-    Long countByStatus(@Param("status") OrderStatus status);
+    Long countByStatus(OrderStatus status);
 }
