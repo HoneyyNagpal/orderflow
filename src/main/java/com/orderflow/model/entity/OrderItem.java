@@ -1,5 +1,6 @@
 package com.orderflow.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -7,6 +8,7 @@ import java.math.BigDecimal;
 @Table(name = "order_items")
 public class OrderItem extends BaseEntity {
 
+    @JsonIgnore  // Prevent infinite recursion
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
@@ -15,26 +17,23 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "product_name", nullable = false, length = 200)
-    private String productName;
-
-    @Column(name = "product_sku", nullable = false, length = 50)
-    private String productSku;
-
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;
 
-    @Column(name = "discount", precision = 10, scale = 2)
-    private BigDecimal discount = BigDecimal.ZERO;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal discount;
 
-    @Column(name = "line_total", nullable = false, precision = 15, scale = 2)
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal lineTotal;
 
-    // Constructors
-    public OrderItem() {}
+    @Column(nullable = false, length = 50)
+    private String productSku;
+
+    @Column(nullable = false, length = 200)
+    private String productName;
 
     // Getters and Setters
     public Order getOrder() { return order; }
@@ -42,12 +41,6 @@ public class OrderItem extends BaseEntity {
 
     public Product getProduct() { return product; }
     public void setProduct(Product product) { this.product = product; }
-
-    public String getProductName() { return productName; }
-    public void setProductName(String productName) { this.productName = productName; }
-
-    public String getProductSku() { return productSku; }
-    public void setProductSku(String productSku) { this.productSku = productSku; }
 
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
@@ -61,9 +54,9 @@ public class OrderItem extends BaseEntity {
     public BigDecimal getLineTotal() { return lineTotal; }
     public void setLineTotal(BigDecimal lineTotal) { this.lineTotal = lineTotal; }
 
-    // Business methods
-    public void calculateLineTotal() {
-        BigDecimal subtotal = unitPrice.multiply(BigDecimal.valueOf(quantity));
-        this.lineTotal = subtotal.subtract(discount != null ? discount : BigDecimal.ZERO);
-    }
+    public String getProductSku() { return productSku; }
+    public void setProductSku(String productSku) { this.productSku = productSku; }
+
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
 }

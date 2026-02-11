@@ -1,7 +1,11 @@
 package com.orderflow.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.orderflow.exception.InsufficientStockException;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products", indexes = {
@@ -10,39 +14,72 @@ import java.math.BigDecimal;
 })
 public class Product extends BaseEntity {
 
-    @Column(name = "sku", unique = true, nullable = false, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String sku;
 
-    @Column(name = "name", nullable = false, length = 200)
+    @Column(nullable = false, length = 200)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "cost_price", precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2)
     private BigDecimal costPrice;
 
-    @Column(name = "quantity_in_stock", nullable = false)
+    @Column(nullable = false)
     private Integer quantityInStock = 0;
 
-    @Column(name = "reserved_quantity", nullable = false)
+    @Column(nullable = false)
     private Integer reservedQuantity = 0;
 
-    @Column(name = "min_stock_level")
     private Integer minStockLevel;
 
-    @Column(name = "active", nullable = false)
+    @Column(nullable = false)
     private Boolean active = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    // Constructors
-    public Product() {}
+    @JsonIgnore  // Prevent infinite recursion
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    public void reserveStock(int quantity) {
+        if (quantityInStock < quantity) {
+            throw new InsufficientStockException("Insufficient stock for product: " + name);
+        }
+        this.reservedQuantity += quantity;
+    }
+
+    public void releaseReservedStock(int quantity) {
+        this.reservedQuantity = Math.max(0, this.reservedQuantity - quantity);
+    }
+
+    public void reduceStock(int quantity) {
+        if (quantityInStock < quantity) {
+            throw new InsufficientStockException("Insufficient stock for product: " + name);
+        }
+        this.quantityInStock -= quantity;
+        this.reservedQuantity = Math.max(0, this.reservedQuantity - quantity);
+    }
+
+    public void increaseStock(int quantity) {
+        this.quantityInStock += quantity;
+    }
+
+    @Transient
+    public Integer getAvailableStock() {
+        return quantityInStock - reservedQuantity;
+    }
+
+    @Transient
+    public boolean isLowStock() {
+        return minStockLevel != null && quantityInStock <= minStockLevel;
+    }
 
     // Getters and Setters
     public String getSku() { return sku; }
@@ -75,28 +112,6 @@ public class Product extends BaseEntity {
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
 
-    // Business methods
-    public Integer getAvailableStock() {
-        return quantityInStock - (reservedQuantity != null ? reservedQuantity : 0);
-    }
-
-    public boolean isLowStock() {
-        return minStockLevel != null && getAvailableStock() <= minStockLevel;
-    }
-
-    public void reserveStock(Integer quantity) {
-        if (getAvailableStock() < quantity) {
-            throw new IllegalStateException("Insufficient stock");
-        }
-        this.reservedQuantity = (this.reservedQuantity != null ? this.reservedQuantity : 0) + quantity;
-    }
-
-    public void releaseReservedStock(Integer quantity) {
-        this.reservedQuantity = Math.max(0, (this.reservedQuantity != null ? this.reservedQuantity : 0) - quantity);
-    }
-
-    public void reduceStock(Integer quantity) {
-        this.quantityInStock -= quantity;
-        this.reservedQuantity = Math.max(0, (this.reservedQuantity != null ? this.reservedQuantity : 0) - quantity);
-    }
+    public List<OrderItem> getOrderItems() { return orderItems; }
+    public void setOrderItems(List<OrderItem> orderItems) { this.orderItems = orderItems; }
 }

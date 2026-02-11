@@ -1,5 +1,7 @@
 package com.orderflow.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.orderflow.model.enums.CustomerSegment;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -9,26 +11,23 @@ import java.util.List;
 @Entity
 @Table(name = "customers", indexes = {
     @Index(name = "idx_customer_email", columnList = "email"),
-    @Index(name = "idx_customer_phone", columnList = "phone_number")
+    @Index(name = "idx_customer_phone", columnList = "phoneNumber")
 })
 public class Customer extends BaseEntity {
 
-    @Column(name = "customer_code", unique = true, nullable = false, length = 20)
-    private String customerCode;
-
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String lastName;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "phone_number", length = 20)
+    @Column(length = 20)
     private String phoneNumber;
 
-    @Column(name = "company_name", length = 100)
+    @Column(length = 100)
     private String companyName;
 
     @Embedded
@@ -52,31 +51,42 @@ public class Customer extends BaseEntity {
     private Address shippingAddress;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "segment", length = 20)
+    @Column(length = 20)
     private CustomerSegment segment = CustomerSegment.REGULAR;
 
-    @Column(name = "loyalty_points")
     private Integer loyaltyPoints = 0;
 
-    @Column(name = "total_orders")
     private Integer totalOrders = 0;
 
-    @Column(name = "total_spent", precision = 15, scale = 2)
+    @Column(precision = 15, scale = 2)
     private BigDecimal totalSpent = BigDecimal.ZERO;
 
-    @Column(name = "active", nullable = false)
+    @Column(nullable = false)
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(unique = true, nullable = false, length = 20)
+    private String customerCode;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    // Constructors
-    public Customer() {}
+    public void autoUpdateSegment() {
+        if (totalSpent.compareTo(new BigDecimal("100000")) > 0) {
+            this.segment = CustomerSegment.VIP;
+        } else if (totalSpent.compareTo(new BigDecimal("50000")) > 0) {
+            this.segment = CustomerSegment.PREMIUM;
+        } else {
+            this.segment = CustomerSegment.REGULAR;
+        }
+    }
+
+    @JsonProperty("fullName")  // Include in JSON
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 
     // Getters and Setters
-    public String getCustomerCode() { return customerCode; }
-    public void setCustomerCode(String customerCode) { this.customerCode = customerCode; }
-
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
@@ -113,22 +123,9 @@ public class Customer extends BaseEntity {
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 
+    public String getCustomerCode() { return customerCode; }
+    public void setCustomerCode(String customerCode) { this.customerCode = customerCode; }
+
     public List<Order> getOrders() { return orders; }
     public void setOrders(List<Order> orders) { this.orders = orders; }
-
-    // Business methods
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
-
-    public void updateAfterOrder(BigDecimal orderAmount) {
-        this.totalOrders = (this.totalOrders == null ? 0 : this.totalOrders) + 1;
-        this.totalSpent = (this.totalSpent == null ? BigDecimal.ZERO : this.totalSpent).add(orderAmount);
-        
-        if (this.totalSpent.compareTo(new BigDecimal("100000")) > 0) {
-            this.segment = CustomerSegment.VIP;
-        } else if (this.totalSpent.compareTo(new BigDecimal("50000")) > 0) {
-            this.segment = CustomerSegment.PREMIUM;
-        }
-    }
 }
