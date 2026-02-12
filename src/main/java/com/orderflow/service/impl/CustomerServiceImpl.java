@@ -79,7 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional(readOnly = true)
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+        return customerRepository.findAllActiveCustomers();
     }
 
     @Override
