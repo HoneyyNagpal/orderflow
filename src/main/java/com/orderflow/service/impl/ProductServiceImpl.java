@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setCostPrice(product.getCostPrice());
         existingProduct.setMinStockLevel(product.getMinStockLevel());
         existingProduct.setActive(product.getActive());
+        existingProduct.setQuantityInStock(product.getQuantityInStock());
         existingProduct.setCategory(product.getCategory());
         
         return productRepository.save(existingProduct);
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAllActiveProducts();
     }
 
     @Override
