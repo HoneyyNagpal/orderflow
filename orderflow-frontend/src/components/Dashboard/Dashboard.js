@@ -6,7 +6,7 @@ import {
   People as PeopleIcon,
   Inventory as InventoryIcon,
   ShoppingCart as OrdersIcon,
-  Payment as PaymentIcon,
+
   TrendingUp as TrendingUpIcon,
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
