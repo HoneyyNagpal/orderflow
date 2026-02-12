@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: orderflow-backend
+    runtime: docker
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JWT_SECRET
+        generateValue: true
