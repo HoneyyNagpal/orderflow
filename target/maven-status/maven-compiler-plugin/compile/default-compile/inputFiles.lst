@@ -39,6 +39,7 @@
 /Users/honeynagpal/orderflow/src/main/java/com/orderflow/service/OrderService.java
 /Users/honeynagpal/orderflow/src/main/java/com/orderflow/config/JacksonConfig.java
 /Users/honeynagpal/orderflow/src/main/java/com/orderflow/model/enums/PaymentStatus.java
+/Users/honeynagpal/orderflow/src/main/java/com/orderflow/config/CorsConfig.java
 /Users/honeynagpal/orderflow/src/main/java/com/orderflow/controller/CustomerController.java
 /Users/honeynagpal/orderflow/src/main/java/com/orderflow/service/impl/PaymentServiceImpl.java
 /Users/honeynagpal/orderflow/src/main/java/com/orderflow/repository/CustomerRepository.java

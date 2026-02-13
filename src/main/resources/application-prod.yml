@@ -1,19 +1,24 @@
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:h2:file:./data/orderflowdb}
-    username: ${DATABASE_USERNAME:sa}
-    password: ${DATABASE_PASSWORD:password}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 2
+      minimum-idle: 1
+      connection-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-  h2:
-    console:
-      enabled: false
+      host: localhost
+      port: 6379
 
 jwt:
   secret: ${JWT_SECRET:orderflow-super-secret-key-for-jwt-minimum-256-bits-long-string-here}

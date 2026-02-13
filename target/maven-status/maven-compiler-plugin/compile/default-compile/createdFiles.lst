@@ -16,6 +16,7 @@ com/orderflow/config/JacksonConfig.class
 com/orderflow/service/CategoryService.class
 com/orderflow/model/enums/PaymentStatus.class
 com/orderflow/model/entity/Product.class
+com/orderflow/model/dto/OrderResponseDTO.class
 com/orderflow/model/entity/User.class
 com/orderflow/service/impl/PaymentServiceImpl.class
 com/orderflow/exception/OrderProcessingException.class
@@ -50,6 +51,7 @@ com/orderflow/model/enums/PaymentMethod.class
 com/orderflow/exception/InsufficientStockException.class
 com/orderflow/exception/BadRequestException.class
 com/orderflow/exception/GlobalExceptionHandler.class
+com/orderflow/model/dto/OrderResponseDTO$OrderItemDTO.class
 com/orderflow/repository/InvoiceRepository.class
 com/orderflow/repository/ProductRepository.class
 com/orderflow/controller/InvoiceController.class
@@ -57,4 +59,5 @@ com/orderflow/controller/ProductController.class
 com/orderflow/model/entity/Category.class
 com/orderflow/repository/OrderItemRepository.class
 com/orderflow/controller/CustomerController.class
+com/orderflow/config/CorsConfig.class
 com/orderflow/model/dto/LoginRequest.class
