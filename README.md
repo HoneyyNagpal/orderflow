@@ -1,6 +1,6 @@
 # OrderFlow
 
-A full-stack order management system I built to learn Spring Boot and React together. It handles the usual business stuff — customers, products, orders, and payments - with a clean UI and proper authentication.
+A full-stack order management system I built to learn Spring Boot and React together. It handles the usual business stuff — customers, products, orders, and payments — with a clean UI and proper authentication.
 
 **Live demo:** https://orderflow-frontend-mu.vercel.app  
 **Backend API:** https://orderflow-backend-ezt5.onrender.com
