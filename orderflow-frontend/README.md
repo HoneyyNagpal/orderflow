@@ -1,70 +1,139 @@
-# Getting Started with Create React App
+# OrderFlow
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack order management system I built to learn Spring Boot and React together. It handles the usual business stuff — customers, products, orders, and payments - with a clean UI and proper authentication.
 
-## Available Scripts
+**Live demo:** https://orderflow-frontend-mu.vercel.app  
+**Backend API:** https://orderflow-backend-ezt5.onrender.com
 
-In the project directory, you can run:
+> Note: The backend is on Render's free tier so the first request after inactivity takes about 30 seconds to wake up.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## What it does
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Register and login with JWT authentication
+- Manage customers (add, edit, delete, segments like VIP/Regular)
+- Manage products (add, edit, delete, stock tracking with low-stock warnings)
+- Create orders with multiple items, track status, cancel orders
+- Record payments with different methods (UPI, cards, net banking, etc.)
+- Dashboard that shows live stats — total customers, products, orders, revenue
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech stack
 
-### `npm run build`
+**Backend**
+- Java 17 + Spring Boot 3.2
+- Spring Security with JWT
+- Spring Data JPA + Hibernate
+- PostgreSQL (Neon) in production, H2 locally
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Frontend**
+- React 18
+- Material-UI v5
+- Axios for API calls
+- React Router v6
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Deployed on**
+- Backend → Render
+- Frontend → Vercel
+- Database → Neon (PostgreSQL)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Running locally
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+You'll need Java 17, Node.js 18, and Maven installed.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Backend**
+```bash
+git clone https://github.com/HoneyyNagpal/orderflow.git
+cd orderflow
+mvn spring-boot:run
+```
+Runs on http://localhost:8080  
+H2 console at http://localhost:8080/h2-console
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Frontend**
+```bash
+cd orderflow-frontend
+npm install
+npm start
+```
+Runs on http://localhost:3000
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Project structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+orderflow/
+├── src/main/java/com/orderflow/
+│   ├── config/          # Security, CORS, Jackson
+│   ├── controller/      # REST controllers
+│   ├── model/
+│   │   ├── entity/      # JPA entities
+│   │   ├── dto/         # Response DTOs
+│   │   └── enums/       # Status enums
+│   ├── repository/      # JPA repositories
+│   ├── service/         # Business logic
+│   └── exception/       # Error handling
+│
+orderflow-frontend/
+├── src/
+│   ├── components/
+│   │   ├── Auth/        # Login, Register
+│   │   ├── Dashboard/
+│   │   ├── Customers/
+│   │   ├── Products/
+│   │   ├── Orders/
+│   │   ├── Payments/
+│   │   └── Layout/
+│   ├── contexts/        # Auth context
+│   └── services/        # API calls
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+All endpoints except auth require a Bearer token in the Authorization header.
 
-### Analyzing the Bundle Size
+```
+POST   /api/v1/auth/register
+POST   /api/v1/auth/login
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+GET    /api/v1/customers
+POST   /api/v1/customers
+PUT    /api/v1/customers/{id}
+DELETE /api/v1/customers/{id}
 
-### Making a Progressive Web App
+GET    /api/v1/products
+POST   /api/v1/products
+PUT    /api/v1/products/{id}
+DELETE /api/v1/products/{id}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+GET    /api/v1/orders
+POST   /api/v1/orders
+PATCH  /api/v1/orders/{id}/status
+POST   /api/v1/orders/{id}/cancel
 
-### Advanced Configuration
+POST   /api/v1/payments
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Things I want to add later
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Invoice PDF generation
+- Email notifications when order status changes
+- Charts on the dashboard
+- Search and filters on the tables
+- Switch to MySQL for production
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Author
+
+Honey Nagpal  
+GitHub: https://github.com/HoneyyNagpal
